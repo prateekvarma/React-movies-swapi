@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -7,8 +7,8 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  async function fetchMoviesHandler() {
+  
+  const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null); //just to reset any previous errors
     try {
@@ -33,7 +33,11 @@ function App() {
       setError(error.message); //this error message will be the same as we manually wrote above
     }
     setIsLoading(false); // Loading is diabled in the end, no matter success or error
-  }
+  }, []);
+  
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
 
   return (
     <React.Fragment>
